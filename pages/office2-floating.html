@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../js/vendor/aframe.min.js"></script>
+    <link rel="icon" sizes="192x192" href="https://aframe.io/images/aframe-logo-192.png">
+    <script src="../js/aframe-hyperlink.js"></script>
+  <body>
+    <a-scene>
+      <a-assets>
+          <a-asset-item id="office-floating" src="../models/office-floating.dae"></a-asset-item>
+          <img id="lobby-orbicon" src="../img/lobby-orbicon.png">
+          <img id="skymap" src="../img/skybox-cosmic.png">
+        </a-assets>
+
+    <!--..............................................................-->
+          <a-entity>
+            <a-camera id="camera" look-controls wasd-controls>
+              <!-- <a-cursor color="#4CC3D9"></a-cursor> -->
+              <a-ring radius-outer="0.03" radius-inner="0.02"
+                position="0 0 -1"
+                material="color: cyan; shader: flat"
+                cursor="maxDistance: 30; fuse: true">
+                <a-animation begin="click" easing="ease-in" attribute="scale"
+                  fill="backwards" from="0.1 0.1 0.1" to="1 1 1" dur="150"></a-animation>
+                <a-animation begin="fusing" easing="ease-in" attribute="scale"
+                  fill="forwards" from="1 1 1" to="0.1 0.1 0.1" dur="1500"></a-animation>
+              </a-ring>
+            </a-camera>
+          </a-entity>
+
+        <a-sky color="#212F43"></a-sky>
+        <a-entity position="0 0 0" id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:120" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
+        <a-light position="0, 15, 0" color="#E7FFFE"></a-light>
+
+              <!-- Link orb-on-pedestal! -->
+          <a-entity>
+            <a-sphere position="2 1 0" radius="0.3" material="src: #lobby-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" href="../index.html">
+            </a-sphere>
+            <a-box id="pedestal" position="2 0 0" color="#000" opacity="1" rotation="0 0 0"
+            scale="0.4 1 0.4"></a-box>
+          </a-entity>
+
+        <a-collada-model src="#office-floating"></a-collada-model>
+    </a-scene>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script>navigator.serviceWorker.register('../sw.js');</script>
+    <title>desert</title>
+    <script src="../js/vendor/aframe.min.js"></script>
+    <script src="../js/aframe-hyperlink.js"></script>
+  </head>
+  <body>
+    <a-scene>
+    <a-assets>
+<!--asset-item can include geometry, models, and materials-->
+    <a-asset-item id="desert" src="../models/desert.dae"></a-asset-item>
+    <a-asset-item id="mesquite-tree" src="../models/mesquite.dae"></a-asset-item>
+    <a-asset-item id="rock" src="../models/rock1.dae"></a-asset-item>
+    <img id="lobby-orbicon" src="../img/lobby-orbicon.png">
+    <img id="skymap" src="../img/desert-sky.png">
+
+    </a-assets>
+
+<!--..............................................................-->
+      <a-entity>
+        <a-camera id="camera" look-controls wasd-controls>
+          <!-- <a-cursor color="#4CC3D9"></a-cursor> -->
+          <a-ring radius-outer="0.03" radius-inner="0.02"
+            position="0 0 -1"
+            material="color: cyan; shader: flat"
+            cursor="maxDistance: 30; fuse: true">
+            <a-animation begin="click" easing="ease-in" attribute="scale"
+              fill="backwards" from="0.1 0.1 0.1" to="1 1 1" dur="150"></a-animation>
+            <a-animation begin="fusing" easing="ease-in" attribute="scale"
+              fill="forwards" from="1 1 1" to="0.1 0.1 0.1" dur="1500"></a-animation>
+          </a-ring>
+        </a-camera>
+      </a-entity>
+
+
+      <!-- Link orb-on-pedestal! -->
+      <a-entity>
+        <a-sphere position="1.5 1 -1" radius="0.3" material="src: #lobby-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" href="../index.html">
+        </a-sphere>
+        <a-box id="pedestal" position="1.5 0 -1" color="#000" opacity="1" rotation="0 0 0"
+        scale="0.4 1 0.4"></a-box>
+      </a-entity>
+
+
+      <a-collada-model src="#desert" position="0 0 0" scale="1 1 1"></a-collada-model>
+      <a-collada-model src="#rock" position="2 0 2" scale="1 1 1"></a-collada-model>
+
+      <a-sky color="#01CDD4"></a-sky>
+      <a-entity position="0 0 0" id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:150" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
+
+      <a-light type="directional" position="3 10 5" color="#F1EFC5" intensity="1"></a-light>
+        <a-light type="ambient" position="0 2 0" color="#ffffff" intensity="0.8"></a-light>
+    </a-scene>
+  </body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script>navigator.serviceWorker.register('../sw.js');</script>
+    <link rel="icon" sizes="192x192" href="https://aframe.io/images/aframe-logo-192.png">
+    <script src="../js/vendor/aframe.min.js"></script>
+        <script src="../js/aframe-hyperlink.js"></script>
+  </head>
+  <body>
+    <a-scene>
+  <a-assets>
+      <a-asset-item id="vending-machine-scenery" src="../models/vending-machine-scenery.dae"></a-asset-item>
+      <a-asset-item id="vending-machine" src="../models/vending-machine.dae"></a-asset-item>
+      <a-asset-item id="portal-orb" src="../models/portal-orb.dae"></a-asset-item>
+      <img id="lobby-orbicon" src="../img/lobby-orbicon.png">
+      <img id="skymap" src="../img/skybox-night1.png">
+    </a-assets>
+
+<!--..............................................................-->
+      <a-entity>
+        <a-camera id="camera" look-controls wasd-controls>
+          <!-- <a-cursor color="#4CC3D9"></a-cursor> -->
+          <a-ring radius-outer="0.03" radius-inner="0.02"
+            position="0 0 -1"
+            material="color: cyan; shader: flat"
+            cursor="maxDistance: 30; fuse: true">
+            <a-animation begin="click" easing="ease-in" attribute="scale"
+              fill="backwards" from="0.1 0.1 0.1" to="1 1 1" dur="150"></a-animation>
+            <a-animation begin="fusing" easing="ease-in" attribute="scale"
+              fill="forwards" from="1 1 1" to="0.1 0.1 0.1" dur="1500"></a-animation>
+          </a-ring>
+        </a-camera>
+      </a-entity>
+
+    <a-sky color="#39615A"></a-sky>
+    <a-entity position="0 0 0" id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
+    <a-light position="0, 10, 0" type="ambient" color="#fff"></a-light>
+    <a-light position="-5, 2, -5" color="#4A9CDB"></a-light>
+    <a-light position="5, 6, -3" color="#4A9CDB"></a-light>
+
+    <a-entity collada-model="#vending-machine-scenery" position="0, 0, -2" scale="0.6 0.6 0.6"></a-entity>
+
+    <a-entity collada-model="#vending-machine" position="0, 0, -2" scale="0.6 0.6 0.6"></a-entity>
+
+    <a-entity collada-model="#portal-orb" href="http://sirokos.com/GPUAsteroids/" position="0, 0, -2" scale="0.6 0.6 0.6"><a-animation attribute="position"
+           begin="2000"
+               dur="5000"
+               direction="reverse"
+               fill="none"
+               to="0 0.5 -2"
+               repeat="indefinite"></a-animation></a-entity>
+
+          <!-- Link orb-on-pedestal! -->
+      <a-entity>
+        <a-sphere position="-1 1 1" radius="0.3" material="src: #lobby-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" href="../index.html">
+        </a-sphere>
+        <a-box id="shadow" position="-1 0 1" color="#000" opacity="1" rotation="0 0 0"
+        scale="0.4 1 0.4"></a-box>
+      </a-entity>
+
+    <a-plane height="30" width="30" rotation="-90, 0, 0" material="shader: flat; color: #39615A"></a-plane>
+    </a-scene>
+  </body>
+</html>
