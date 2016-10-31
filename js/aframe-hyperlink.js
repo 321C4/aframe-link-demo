@@ -82,6 +82,8 @@
   };
 
   var initScene = () => {
+    console.log('initScene: called', hasInit);
+
     if (hasInit) {
       return;
     }
@@ -93,25 +95,34 @@
 
     hasInit = true;
 
+    console.log('initScene: checking', hasInit);
+
     whenSceneReady(scene, () => {
+      console.log('initScene: checking', hasInit);
       navigator.getVRDisplays().then(displays => {
         if (!displays.length) { return; }
+        console.log('getVRDisplays', displays);
         vrDisplay = displays[0];
       });
-      autoEnterVR();
       scene.addEventListener('enter-vr', function () {
-        localStorage.vrPresenting = true;
+        console.log('<a-scene> enter-vr');
+        sessionStorage.vrPresenting = true;
       });
       scene.addEventListener('exit-vr', function () {
-        localStorage.vrPresenting = wasPresenting;
+        console.log('<a-scene> exit-vr');
+        sessionStorage.vrPresenting = wasPresenting;
       });
+      autoEnterVR();
     });
   };
 
   var autoEnterVR = () => {
-    if (localStorage.vrPresenting !== 'true') {
+    console.log('autoEnterVR', sessionStorage.vrPresenting);
+    if (sessionStorage.vrPresenting !== 'true') {
       return;
     }
+
+    console.log('autoEnterVR');
 
     whenSceneReady(scene, enterVR);
   };
@@ -123,7 +134,7 @@
   var navDuringVR = () => {
     wasPresenting = !!(vrDisplay && vrDisplay.isPresenting);
     if (wasPresenting) {
-      localStorage.vrPresenting = wasPresenting;
+      sessionStorage.vrPresenting = wasPresenting;
     }
     return scene.exitVR();
   };
