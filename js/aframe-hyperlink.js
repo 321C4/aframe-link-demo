@@ -1,5 +1,8 @@
 /* globals AFRAME */
 (function () {
+  var debug = false;
+  var log = debug ? console.log.bind(console) : function () {};
+
   var registerComponent = function () {
     if (typeof AFRAME === 'undefined') {
       throw new Error('Component attempted to register before AFRAME ' +
@@ -82,7 +85,7 @@
   };
 
   var initScene = () => {
-    console.log('initScene: called', hasInit);
+    log('initScene: called', hasInit);
 
     if (hasInit) {
       return;
@@ -95,34 +98,35 @@
 
     hasInit = true;
 
-    console.log('initScene: checking', hasInit);
+    log('initScene: checking', hasInit);
 
     whenSceneReady(scene, () => {
-      console.log('initScene: checking', hasInit);
+      log('initScene: checking', hasInit);
       navigator.getVRDisplays().then(displays => {
         if (!displays.length) { return; }
-        console.log('getVRDisplays', displays);
+        log('getVRDisplays', displays);
         vrDisplay = displays[0];
+
+        scene.addEventListener('enter-vr', function () {
+          log('<a-scene> enter-vr');
+          sessionStorage.vrPresenting = true;
+        });
+        scene.addEventListener('exit-vr', function () {
+          log('<a-scene> exit-vr');
+          sessionStorage.vrPresenting = wasPresenting;
+        });
+        autoEnterVR();
       });
-      scene.addEventListener('enter-vr', function () {
-        console.log('<a-scene> enter-vr');
-        sessionStorage.vrPresenting = true;
-      });
-      scene.addEventListener('exit-vr', function () {
-        console.log('<a-scene> exit-vr');
-        sessionStorage.vrPresenting = wasPresenting;
-      });
-      autoEnterVR();
     });
   };
 
   var autoEnterVR = () => {
-    console.log('autoEnterVR', sessionStorage.vrPresenting);
+    log('autoEnterVR', sessionStorage.vrPresenting);
     if (sessionStorage.vrPresenting !== 'true') {
       return;
     }
 
-    console.log('autoEnterVR');
+    log('autoEnterVR');
 
     whenSceneReady(scene, enterVR);
   };
