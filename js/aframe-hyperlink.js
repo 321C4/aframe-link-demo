@@ -51,7 +51,7 @@
         clone.material = new THREE.MeshBasicMaterial({
             color: 0x0000ff,
             transparent: true,
-            opacity: 0.5
+            opacity: 0.3
         });
         clone.scale.set(1.2, 1.2, 1.2);
         clone.visible = false;
