@@ -1,7 +1,7 @@
 {
   "private": "true",
   "devDependencies": {
-    "sherpy": "^1.0.0"
+    "sherpy": "^1.0.2"
   },
   "scripts": {
     "start": "npm run dev",
