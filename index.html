@@ -6,6 +6,7 @@
     <title>lobby</title>
     <script src="../js/vendor/aframe.min.js"></script>
     <script src="../js/vendor/aframe-bmfont-text-component.min.js"></script>
+    <script src="../js/aframe-hyperlink.js"></script>
   </head>
   <body>
     <a-scene>
@@ -92,28 +93,5 @@
       <a-sky color="#0A1633"></a-sky>
       <a-entity position="0 0 0" id="sky" geometry="primitive:sphere; radius:30; phiLength:360; phiStart:0; thetaLength:90" material="shader:flat; side:back; height:2048; src:#skymap; width:2048"></a-entity>
     </a-scene>
-    <script>
-    // find any elements with href attribute and set highlight on mouse-enter to visible.
-    var links = document.querySelectorAll('[href]');
-    links.forEach(function(link) {
-      link.addEventListener('mouseenter', function(e) {
-        var highlight = e.srcElement.parentElement.querySelector('.highlight');
-        if (highlight) highlight.setAttribute('visible', true);
-      })
-    })
-
-    // set highlight to invisible on mouse-leave, navigate link when clicked.
-    var linkHighlights = document.querySelectorAll('.highlight');
-    linkHighlights.forEach(function(highlight) {
-      highlight.addEventListener('mouseleave', function(e) {
-        e.srcElement.setAttribute('visible', false);
-      });
-
-      highlight.addEventListener('click', function(e) {
-        var href = e.srcElement.parentElement.querySelector('[href]').getAttribute('href');
-        if (href) window.location.href = href;
-      })
-    });
-    </script>
   </body>
 </html>
