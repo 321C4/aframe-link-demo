@@ -44,6 +44,9 @@
       setupHighlight: function () {
         // clone mesh and setup highlighter material
         var mesh = this.el.object3DMap.mesh;
+        if (!mesh) {
+          return false;
+        }
         var clone = mesh.clone();
         clone.material = new THREE.MeshBasicMaterial({
             color: 0x0000ff,
