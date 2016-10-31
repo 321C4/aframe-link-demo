@@ -9,24 +9,24 @@
     <link rel="prefetch" href="pages/office1-mountain.html">
     <link rel="prefetch" href="pages/office1-floating.html">
     <title>lobby</title>
-    <script src="../js/vendor/aframe.min.js"></script>
-    <script src="../js/vendor/aframe-bmfont-text-component.min.js"></script>
-    <script src="../js/aframe-hyperlink.js"></script>
+    <script src="js/vendor/aframe.min.js"></script>
+    <script src="js/vendor/aframe-bmfont-text-component.min.js"></script>
+    <script src="js/aframe-hyperlink.js"></script>
   </head>
   <body>
     <a-scene>
     <a-assets>
 <!--asset-item can include geometry, models, and materials-->
-    <a-asset-item id="lobby-courtyard" src="../models/lobby-courtyard-2.dae"></a-asset-item>
-    <a-asset-item id="mesquite-tree" src="../models/mesquite.dae"></a-asset-item>
+    <a-asset-item id="lobby-courtyard" src="models/lobby-courtyard-2.dae"></a-asset-item>
+    <a-asset-item id="mesquite-tree" src="models/mesquite.dae"></a-asset-item>
     <a-mixin id="link-shape" geometry="primitive: sphere"></a-mixin>
     <a-mixin id="hover-color" material="color: blue"></a-mixin>
     <a-mixin id="link-color" material="color: #8A8A8"></a-mixin>
-    <img id="desert-orbicon" src="../img/desert-orbicon.png">
-    <img id="mt-office-orbicon" src="../img/mt-office-orbicon.png">
-    <img id="floating-office-orbicon" src="../img/floating-office-orbicon.png">
-    <img id="vending-machine-orbicon" src="../img/vending-machine-orbicon.png">
-    <img id="skymap" src="../img/skybox-night1.png">
+    <img id="desert-orbicon" src="img/desert-orbicon.png">
+    <img id="mt-office-orbicon" src="img/mt-office-orbicon.png">
+    <img id="floating-office-orbicon" src="img/floating-office-orbicon.png">
+    <img id="vending-machine-orbicon" src="img/vending-machine-orbicon.png">
+    <img id="skymap" src="img/skybox-night1.png">
     </a-assets>
 
 <!--..............................................................-->
@@ -48,7 +48,7 @@
 <!--..............................................................-->
       <!-- Link orb-on-pedestal! -->
       <a-entity position="-1 1 -1">
-        <a-sphere rotation="0 200 0" radius="0.3" material="src: #vending-machine-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" roughness="0.8" href="../pages/link-vending-machine.html">
+        <a-sphere rotation="0 200 0" radius="0.3" material="src: #vending-machine-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" roughness="0.8" href="pages/link-vending-machine.html">
         </a-sphere>
         <a-sphere class="highlight" visible="false" radius="0.35" rotation="0 0 0" color="#0000ff" opacity="0.6" roughness="1" metalness="0.5"></a-sphere>
         <a-box id="shadow" position="0 -1 0" color="#000" opacity="1" rotation="0 0 0"
@@ -57,7 +57,7 @@
 
             <!-- Link orb-on-pedestal! -->
       <a-entity position="1 1 -1">
-        <a-sphere rotation="0 180 0" radius="0.3" material="src: #mt-office-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" roughness="0.8" href="../pages/office1-mountain.html">
+        <a-sphere rotation="0 180 0" radius="0.3" material="src: #mt-office-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" roughness="0.8" href="pages/office1-mountain.html">
         </a-sphere>
         <a-sphere class="highlight" visible="false" radius="0.35" rotation="0 0 0" color="#0000ff" opacity="0.6" roughness="1" metalness="0.5"></a-sphere>
         <a-box id="shadow" position="0 -1 0" color="#000" opacity="1" rotation="0 0 0"
@@ -66,7 +66,7 @@
 
             <!-- Link orb-on-pedestal! -->
       <a-entity position="-1 1 1">
-        <a-sphere radius="0.3" rotation="0 -60 0" material="src: #floating-office-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" roughness="0.8" href="../pages/office2-floating.html">
+        <a-sphere radius="0.3" rotation="0 -60 0" material="src: #floating-office-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" roughness="0.8" href="pages/office2-floating.html">
         </a-sphere>
         <a-sphere class="highlight" visible="false" radius="0.35" rotation="0 0 0" color="#0000ff" opacity="0.6" roughness="1" metalness="0.5"></a-sphere>
         <a-box id="shadow" position="0 -1 0" color="#000" opacity="1" rotation="0 0 0"
@@ -75,7 +75,7 @@
 
             <!-- Link orb-on-pedestal! -->
       <a-entity position="1 1 1" >
-        <a-sphere radius="0.3" rotation="0 0 0" material="src: #desert-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" roughness="0.8" href="../pages/desert.html">
+        <a-sphere radius="0.3" rotation="0 0 0" material="src: #desert-orbicon; repeat: 1 1; roughness: 2;" color="#ffffff" opacity="1" roughness="0.8" href="pages/desert.html">
         </a-sphere>
         <a-sphere class="highlight" visible="false" radius="0.35" rotation="0 0 0" color="#0000ff" opacity="0.6" roughness="1" metalness="0.5"></a-sphere>
         <a-box id="shadow" position="0 -1 0" color="#000" opacity="1" rotation="0 0 0"
