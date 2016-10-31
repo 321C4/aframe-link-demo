@@ -1,9 +1,9 @@
 /* global caches, self */
-var debug = 1;
+var debug = false;
 var log = debug ? console.log.bind(console) : function () {};
 
 var CURRENT_CACHES_HASHES = {
-  static: '-v-d6f3738b80e222bbb26605b45eacc5688f8fc3add6bc52ff4da2a0fa36970d7f'  // {STATIC_HASH}
+  static: '-v-0a5997de1ad80b308442bf032266444b1fb50b6dbfc792b8dbcd0bc8ec40f712'  // {STATIC_HASH}
 };
 
 var CURRENT_CACHES = {
@@ -11,7 +11,7 @@ var CURRENT_CACHES = {
 };
 
 self.addEventListener('activate', function (event) {
-  console.log('WORKER: activate event in progress.');
+  console.log('WORKER: activate event in progress');
 
   // Delete all caches that aren't named in CURRENT_CACHES.
   // While there is only one cache in this example, the same logic will handle the case where
