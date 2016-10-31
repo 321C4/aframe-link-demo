@@ -4,6 +4,12 @@
     <meta charset="utf-8">
     <!-- <script>navigator.serviceWorker.register('./sw.js', {scope: './'});</script> -->
     <script src="sw-load.js" data-service-worker="sw.js" data-service-worker-scope="./"></script>
+    <!-- preload is currently supported in only Chrome -->
+    <link rel="preload" href="pages/desert.html">
+    <link rel="preload" href="pages/link-vending-machine.html">
+    <link rel="preload" href="pages/office1-mountain.html">
+    <link rel="preload" href="pages/office1-floating.html">
+    <!-- prefetch is currently supported in Chrome, Edge, Firefox -->
     <link rel="prefetch" href="pages/desert.html">
     <link rel="prefetch" href="pages/link-vending-machine.html">
     <link rel="prefetch" href="pages/office1-mountain.html">
