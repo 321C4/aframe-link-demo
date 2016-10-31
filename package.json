@@ -1,10 +1,10 @@
 {
   "private": "true",
   "devDependencies": {
-    "sherpy": "^1.0.2"
+    "sherpy": "^1.0.4"
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "sherpy --open --tunnel"
+    "dev": "sherpy --open --tunnel=false"
   }
 }
