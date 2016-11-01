@@ -5,7 +5,7 @@
     <style>
       html, body { background: #000; }
       a-scene { transition: 1s opacity ease-in-out, 1s visibility ease-in-out; }
-      a-scene:not([data-vr-ready="true"]) { opacity: 0; visibility: visible; }
+      a-scene:not([data-vr-ready="true"]) { opacity: 0; visibility: visible; transition: none; }
       a-scene[data-vr-ready="true"] { opacity: 1; visibility: visible; }
     </style>
     <script src="../sw-load.js" data-service-worker="../sw.js" data-service-worker-scope="../"></script>
