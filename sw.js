@@ -3,7 +3,7 @@ var debug = false;
 var log = debug ? console.log.bind(console) : function () {};
 
 var CURRENT_CACHES_HASHES = {
-  static: '-v-d442763efc8e5abc8d4d06fc5517bf64a18177dd8ede5fb8d0277661b653d9c8'  // {STATIC_HASH}
+  static: '-v-54da00004e2797cd3ab0bf75cb4275028045a2d18874cce76f367c8c5755ccc0'  // {STATIC_HASH}
 };
 
 var CURRENT_CACHES = {

@@ -1,6 +1,6 @@
 /* globals AFRAME, sessionStorage */
 (function () {
-  var debug = false;
+  var debug = true;
   var log = debug ? console.log.bind(console) : function () {};
   var html = document.documentElement;
 
