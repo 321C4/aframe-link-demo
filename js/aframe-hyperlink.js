@@ -86,6 +86,7 @@
     return;
   }
 
+  var isDone = false;
   var vrDisplay;
   var isPresenting = false;
 
@@ -154,7 +155,7 @@
   };
 
   var autoEnterVR = () => {
-    log('autoEnterVR', sessionStorage.vrPresenting);
+    log('autoEnterVR', sessionStorage.vrNavigating);
     if (sessionStorage.vrNavigating !== 'true') {
       return;
     }
@@ -169,16 +170,24 @@
   };
 
   var navDuringVR = isLeaving => {
-    rememberVRPresenting(isLeaving, vrDisplay && vrDisplay.isPresenting);
+    console.log('navDuringVR', vrDisplay, vrDisplay.isPresenting);
+    isDone = true;
+    rememberVRPresenting(vrDisplay && vrDisplay.isPresenting);
     return scene.exitVR();
   };
 
   var rememberVRPresenting = (isVRNavigating) => {
+    console.error('rememberVRPresenting called; isVRNavigating=', isVRNavigating, '; isDone=', isDone);
+    if (isDone) {
+      return;
+    }
+    isPresenting = !!isPresenting;
+    isVRNavigating = !!isVRNavigating;
     console.log('isVRNavigating', isVRNavigating);
     html.dataset.vrMode = isPresenting ? 'stereo' : 'mono';
-    html.dataset.vrPresenting = !!isPresenting;
-    console.error('sessionStorage.vrNavigating = ', !!isVRNavigating);
-    html.dataset.vrNavigating = sessionStorage.vrNavigating = !!isVRNavigating;
+    html.dataset.vrPresenting = isPresenting;
+    console.error('sessionStorage.vrNavigating = ', isVRNavigating);
+    html.dataset.vrNavigating = sessionStorage.vrNavigating = isVRNavigating;
     if (isPresenting) {
       html.dataset.vrPresentingCanvas = sessionStorage.vrPresentingCanvas = getElSelector(scene.canvas);
     } else {
