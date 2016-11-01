@@ -140,7 +140,6 @@
           } else {
             isPresenting = vrDisplay.isPresenting;
           }
-          rememberVRPresenting();
         });
 
         scene.addEventListener('enter-vr', function () {
@@ -178,9 +177,6 @@
 
   var rememberVRPresenting = (isVRNavigating) => {
     console.error('rememberVRPresenting called; isVRNavigating=', isVRNavigating, '; isDone=', isDone);
-    if (isDone) {
-      return;
-    }
     isPresenting = !!isPresenting;
     isVRNavigating = !!isVRNavigating;
     console.log('isVRNavigating', isVRNavigating);
@@ -211,7 +207,11 @@
   });
   window.addEventListener('beforeunload', e => {
     console.log(e.type, e);
-    navDuringVR(true);
+    if (isPresenting) {
+      navDuringVR(true);
+      return;
+    }
+    rememberVRPresenting();
   });
   window.navDuringVR=navDuringVR;
   window.addEventListener('vrdisplayactivate', e => {
@@ -223,10 +223,8 @@
   });
   window.addEventListener('vrdisplaydeactivate', e => {
     console.log(e.type, e);
-    rememberVRPresenting();
   });
   window.addEventListener('vrdisplaydeactivated', e => {
     console.log(e.type, e);
-    rememberVRPresenting();
   });
 })();
