@@ -113,10 +113,12 @@
         scene.addEventListener('enter-vr', function () {
           log('<a-scene> enter-vr');
           sessionStorage.vrPresenting = true;
+          scene.canvas.style.display = 'block';
         });
         scene.addEventListener('exit-vr', function () {
           log('<a-scene> exit-vr');
           sessionStorage.vrPresenting = wasPresenting;
+          scene.canvas.style.display = 'none';
         });
         autoEnterVR();
       });
