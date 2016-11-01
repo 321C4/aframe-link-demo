@@ -1,7 +1,20 @@
-/* globals AFRAME */
+/* globals AFRAME, sessionStorage */
 (function () {
   var debug = false;
   var log = debug ? console.log.bind(console) : function () {};
+  var html = document.documentElement;
+
+  var getElSelector = function (el) {
+    sel = el.tagName.toLowerCase();
+    if (el.id) {
+      sel = '#' + el.id;
+    }
+    var classes = (el.className || '').replace(/\n/g, '').replace(/\s+/g, ' ').split(' ');
+    if (classes.length) {
+      sel += classes.join('.');
+    }
+    return sel;
+  };
 
   var registerComponent = function () {
     if (typeof AFRAME === 'undefined') {
@@ -74,10 +87,10 @@
   }
 
   var vrDisplay;
+  var isPresenting = false;
 
   var hasInit = false;
   var scene;
-  var wasPresenting = false;
 
   var whenSceneReady = (scene, callback) => {
     if (scene.hasLoaded) {
@@ -110,15 +123,30 @@
         log('getVRDisplays', displays);
         vrDisplay = displays[0];
 
+        html.dataset.vrMode = 'mono';
+        html.dataset.vrReady = 'false';
+
+        scene = document.querySelector('a-scene');
+        scene.dataset.vrReady = 'true';
+        if (scene.canvas) {
+          scene.canvas.dataset.vrReady = 'true';
+        }
+
+        window.addEventListener('vrdisplaypresentchange', e => {
+          console.log('"' + e.type + '" event fired');
+          if (!vrDisplay) {
+            isPresenting = false;
+          } else {
+            isPresenting = vrDisplay.isPresenting;
+          }
+          rememberVRPresenting();
+        });
+
         scene.addEventListener('enter-vr', function () {
-          log('<a-scene> enter-vr');
-          sessionStorage.vrPresenting = true;
-          scene.canvas.style.display = 'block';
+          console.log('<a-scene> "enter-vr" event fired');
         });
         scene.addEventListener('exit-vr', function () {
-          log('<a-scene> exit-vr');
-          sessionStorage.vrPresenting = wasPresenting;
-          scene.canvas.style.display = 'none';
+          console.log('<a-scene> "exit-vr" event fired');
         });
         autoEnterVR();
       });
@@ -127,7 +155,7 @@
 
   var autoEnterVR = () => {
     log('autoEnterVR', sessionStorage.vrPresenting);
-    if (sessionStorage.vrPresenting !== 'true') {
+    if (sessionStorage.vrNavigating !== 'true') {
       return;
     }
 
@@ -140,16 +168,56 @@
     return scene.enterVR();
   };
 
-  var navDuringVR = () => {
-    wasPresenting = !!(vrDisplay && vrDisplay.isPresenting);
-    if (wasPresenting) {
-      sessionStorage.vrPresenting = wasPresenting;
-    }
+  var navDuringVR = isLeaving => {
+    rememberVRPresenting(isLeaving, vrDisplay && vrDisplay.isPresenting);
     return scene.exitVR();
+  };
+
+  var rememberVRPresenting = (isVRNavigating) => {
+    console.log('isVRNavigating', isVRNavigating);
+    html.dataset.vrMode = isPresenting ? 'stereo' : 'mono';
+    html.dataset.vrPresenting = !!isPresenting;
+    console.error('sessionStorage.vrNavigating = ', !!isVRNavigating);
+    html.dataset.vrNavigating = sessionStorage.vrNavigating = !!isVRNavigating;
+    if (isPresenting) {
+      html.dataset.vrPresentingCanvas = sessionStorage.vrPresentingCanvas = getElSelector(scene.canvas);
+    } else {
+      html.removeAttribute('data-vr-presenting-canvas');
+      delete sessionStorage.vrPresentingCanvas;
+    }
+    var scenes = document.querySelectorAll('a-scene');
+    for (var i = 0; i < scenes.length; i++) {
+      scene.dataset.vrReady = isVRNavigating ? 'false' : 'true';
+      if (scene.canvas) {
+        scene.canvas.dataset.vrReady = isVRNavigating ? 'false' : 'true';
+      }
+    }
   };
 
   registerComponent();
   initScene();
-  window.addEventListener('load', initScene);
-  window.addEventListener('beforeunload', navDuringVR);
+  window.addEventListener('load', e => {
+    console.log(e.type, e);
+    initScene();
+  });
+  window.addEventListener('beforeunload', e => {
+    console.log(e.type, e);
+    navDuringVR(true);
+  });
+  window.navDuringVR=navDuringVR;
+  window.addEventListener('vrdisplayactivate', e => {
+    console.log(e.type, e);
+    initScene();
+  });
+  window.addEventListener('vrdisplayactivated', e => {
+    console.log(e.type, e);
+  });
+  window.addEventListener('vrdisplaydeactivate', e => {
+    console.log(e.type, e);
+    rememberVRPresenting();
+  });
+  window.addEventListener('vrdisplaydeactivated', e => {
+    console.log(e.type, e);
+    rememberVRPresenting();
+  });
 })();

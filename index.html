@@ -2,6 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <style>
+      html, body { background: #000; }
+      a-scene { transition: 1s opacity ease-in-out, 1s visibility ease-in-out; }
+      a-scene:not([data-vr-ready="true"]) { opacity: 0; visibility: visible; }
+      a-scene[data-vr-ready="true"] { opacity: 1; visibility: visible; }
+    </style>
     <script src="sw-load.js" data-service-worker="sw.js" data-service-worker-scope="./"></script>
     <!-- preload is currently supported in only Chrome -->
     <link rel="preload" href="pages/desert.html">
@@ -13,18 +19,10 @@
     <link rel="prefetch" href="pages/link-vending-machine.html">
     <link rel="prefetch" href="pages/office1-mountain.html">
     <link rel="prefetch" href="pages/office2-floating.html">
-    <title>lobby</title>
+    <title>Lobby | A-Frame Link Demo</title>
     <script src="js/vendor/aframe.min.js"></script>
     <script src="js/vendor/aframe-bmfont-text-component.min.js"></script>
     <script src="js/aframe-hyperlink.js"></script>
-    <style>
-    html, body {
-      background: #000;
-    }
-    .a-canvas {
-      display: none;
-    }
-    </style>
   </head>
   <body>
     <a-scene>

@@ -5,6 +5,7 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "sherpy --open --tunnel=false"
+    "dev": "sherpy --live=true",
+    "tunnel": "sherpy --open=false --live=true --tunnel=true"
   }
 }
