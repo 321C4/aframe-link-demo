@@ -1,20 +1,7 @@
-/* globals AFRAME, sessionStorage */
+/* globals AFRAME, sessionStorage, THREE */
 (function () {
   var debug = true;
   var log = debug ? console.log.bind(console) : function () {};
-  var html = document.documentElement;
-
-  var getElSelector = function (el) {
-    sel = el.tagName.toLowerCase();
-    if (el.id) {
-      sel = '#' + el.id;
-    }
-    var classes = (el.className || '').replace(/\n/g, '').replace(/\s+/g, ' ').split(' ');
-    if (classes.length) {
-      sel += classes.join('.');
-    }
-    return sel;
-  };
 
   var registerComponent = function () {
     if (typeof AFRAME === 'undefined') {
@@ -110,16 +97,6 @@
 
     scene.dataset.isLoaded = 'true';
 
-    var cursor = scene.querySelector('#camera [cursor]');
-
-    if (cursor) {
-      cursor.addEventListener('click', function (e) {
-        if (e.detail && e.detail.intersectedEl && e.detail.intersectedEl.hasAttribute('href')) {
-          scene.dataset.isLoaded = 'false';
-        }
-      });
-    }
-
     if (!displays || !shouldPresent) {
       return;
     }
@@ -166,7 +143,7 @@
 
     initScenesCalled = true;
 
-    scenes = document.querySelectorAll('a-scene');
+    var scenes = document.querySelectorAll('a-scene');
     if (!scenes.length) {
       return;
     }
@@ -176,6 +153,15 @@
     var scene;
     for (var i = 0; i < scenes.length; i++) {
       scene = scenes[i];
+
+      scene.addEventListener('click', function (e) {
+        if (e.detail && e.detail.intersectedEl && e.detail.intersectedEl.hasAttribute('href')) {
+          // Fade out to black (isn't super noticeable because navigation
+          // happens so quickly).
+          scene.dataset.isLoaded = 'false';
+        }
+      });
+
       whenScene(scene, 'loaded', function () {
         log('initScenes: loaded', initScenesCalled);
         if (navigator.getVRDisplays && navigator.vrEnabled !== false) {
