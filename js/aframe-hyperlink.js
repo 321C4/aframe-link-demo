@@ -1,6 +1,7 @@
 /* globals AFRAME, sessionStorage, THREE */
 (function () {
-  var debug = true;
+  // Do not log in production.
+  var debug = window.location.protocol !== 'https:';
   var log = debug ? console.log.bind(console) : function () {};
 
   var registerComponent = function () {
