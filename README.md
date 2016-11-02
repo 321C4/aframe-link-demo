@@ -1,6 +1,10 @@
 # aframe-link-demo
 
-Link traversal in VR using [A-Frame](https://aframe.io/)!
+![Demo (GIF loop) of WebVR link traversal](https://cvan.io/webvr-hyperlinks/assets/img/webvr_link_traversal_demo_anim.gif "Demo (GIF loop) of WebVR link traversal")
+
+Link traversal in WebVR using [A-Frame](https://aframe.io/)!
+
+**[View demo!](https://321c4.github.io/aframe-link-demo/)**
 
 [Read this Mozilla VR blog post for more details.](https://blog.mozvr.com/connecting-virtual-worlds-hyperlinks-in-webvr/)
 
