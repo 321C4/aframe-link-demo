@@ -1,6 +1,6 @@
 # aframe-link-demo
 
-![Demo (GIF loop) of WebVR link traversal](https://cvan.io/webvr-hyperlinks/assets/img/webvr_link_traversal_demo_anim.gif "Demo (GIF loop) of WebVR link traversal")
+![Demo (GIF loop) of WebVR link traversal](https://cloud.githubusercontent.com/assets/203725/19915454/9e7a1ac0-a06f-11e6-8d30-d42ac1f06098.gif "Demo (GIF loop) of WebVR link traversal")
 
 Link traversal in WebVR using [A-Frame](https://aframe.io/)!
 
