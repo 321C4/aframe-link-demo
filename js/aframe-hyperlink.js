@@ -1,4 +1,4 @@
-/* globals AFRAME, sessionStorage, THREE */
+/* globals AFRAME, sessionStorage, THREE, URLSearchParams */
 (function () {
   // Do not log in production.
   var debug = window.location.protocol !== 'https:';
@@ -43,7 +43,7 @@
       },
 
       setupHighlight: function () {
-        // clone mesh and setup highlighter material
+        // Clone mesh and set up highlighter material.
         var mesh = this.el.object3DMap.mesh;
         if (!mesh) {
           return false;
@@ -58,23 +58,20 @@
         clone.visible = false;
         mesh.parent.add(clone);
 
-        // toggle highlighter on mouse events
-        this.el.addEventListener('mouseenter', function (e) {
+        // Toggle highlighter on mouse events.
+        this.el.addEventListener('mouseenter', function () {
           clone.visible = true;
-        })
+        });
 
-        this.el.addEventListener('mouseleave', function (e) {
+        this.el.addEventListener('mouseleave', function () {
           clone.visible = false;
         });
       }
     });
   };
 
-  if (!navigator.getVRDisplays || navigator.vrEnabled === false) {
-    return;
-  }
-
   var initScenesCalled = false;
+  var supportsVR = navigator.getVRDisplays && navigator.vrEnabled !== false;
 
   var whenScene = function (scene, event, callback) {
     // TODO: Return Promises.
@@ -85,12 +82,81 @@
     scene.addEventListener(event, callback);
   };
 
+  var persistActiveVRDisplaysIDs = function (displays) {
+    displays = displays || [];
+    var activeVRDisplaysIDs = JSON.stringify(displays.map(function (display) {
+      return display.displayId;
+    }));
+    sessionStorage.activeVRDisplaysIDs = activeVRDisplaysIDs;
+    return activeVRDisplaysIDs;
+  };
+
   var sceneLoaded = function (scene, displays) {
     var shouldPresent = false;
+
     if (sessionStorage.vrNavigation === 'true') {
       shouldPresent = true;
       delete sessionStorage.vrNavigation;
     }
+
+    // Valid options for auto-presenting in stereo VR mode:
+    // - `?vr`, `?vr=true`, `?vr=1`, `?vr=2`, etc.
+    // - `?vr-display-name-filter=oculus`, `?vr-display-name-filter=vive`, etc.
+    // - `?vr-display-id=1`, `?vr-display-id=2`, etc.
+    // - `?vr-mode`, `?vr-mode=stereo`
+    if (displays && 'URLSearchParams' in window) {
+      var qs = new URLSearchParams(window.location.search);
+      var qsGetClean = function (key) {
+        return (qs.get(key) || '').trim();
+      };
+      var qsVr = qsGetClean('vr');
+      var qsVrDisplayId = qsGetClean('vr-display-id');
+      var qsVrDisplayNameFilter = qsGetClean('vr-display-name-filter');
+      var qsVrMode = qsGetClean('vr-mode');
+
+      if ((qs.has('vr') && qsVr !== 'false' && qsVr !== '0') ||
+          (qs.has('vr-display-name-filter') && qsVrDisplayNameFilter !== '') ||
+          (qs.has('vr-display-id') && qsVrDisplayId !== '') ||
+          (qs.has('vr-mode') && qsVrMode !== 'mono')) {
+        shouldPresent = true;
+
+        var displayId;
+        if (qs.has('vr')) {
+          displayId = parseInt(qsVr, 10);
+        }
+        if (qs.has('vr-display-id')) {
+          displayId = parseInt(qsVrDisplayId, 10);
+          // `VRDisplay#displayId`s are one-based indexed.
+          if (displayId === 0) {
+            displayId = 1;
+          }
+        }
+        if (displayId) {
+          displays = displays.filter(function (display) {
+            return display.displayId === displayId;
+          });
+          persistActiveVRDisplaysIDs(displays);
+        } else if (qs.has('vr')) {
+          // Handle `?vr=true`, for example.
+          persistActiveVRDisplaysIDs(displays);
+        }
+
+        var displayName = qsVrDisplayNameFilter.toLowerCase();
+        if (displayName) {
+          displays = displays.filter(function (display) {
+            return (display.displayName || '').toLowerCase().indexOf(displayName) !== -1;
+          });
+          persistActiveVRDisplaysIDs(displays);
+        }
+      } else if (qs.has('vr') ||
+                 qs.has('vr-display-name-filter') ||
+                 qs.has('vr-display-id') ||
+                 qs.has('vr-mode')) {
+        shouldPresent = false;
+      }
+    }
+
+    // TODO: Add `postMessage` event listener.
 
     if (!scene) {
       return;
@@ -98,7 +164,7 @@
 
     scene.dataset.isLoaded = 'true';
 
-    if (!displays || !shouldPresent) {
+    if (!displays || !supportsVR || !shouldPresent) {
       return;
     }
 
@@ -151,10 +217,7 @@
 
     log('initScenes: checking', initScenesCalled);
 
-    var scene;
-    for (var i = 0; i < scenes.length; i++) {
-      scene = scenes[i];
-
+    Array.prototype.forEach.call(scenes, function (scene) {
       scene.addEventListener('click', function (e) {
         if (e.detail && e.detail.intersectedEl && e.detail.intersectedEl.hasAttribute('href')) {
           // Fade out to black (isn't super noticeable because navigation
@@ -165,7 +228,7 @@
 
       whenScene(scene, 'loaded', function () {
         log('initScenes: loaded', initScenesCalled);
-        if (navigator.getVRDisplays && navigator.vrEnabled !== false) {
+        if (supportsVR) {
           // NOTE: This `navigator.getVRDisplays` call is needed by both
           // Firefox Nightly and experimental Chromium builds currently.
           // And we use it to pass `displays` to `sceneLoaded`, but even
@@ -178,7 +241,7 @@
           return sceneLoaded(scene);
         }
       });
-    }
+    });
   };
 
   var activeVRDisplaysUpdate = function (displays) {
@@ -191,9 +254,7 @@
     if (sessionStorage.vrNavigation === 'true') {
       return;
     }
-    sessionStorage.activeVRDisplaysIDs = JSON.stringify(navigator.activeVRDisplays.map(function (display) {
-      return display.displayId;
-    }));
+    persistActiveVRDisplaysIDs(navigator.activeVRDisplays);
   };
 
   registerComponent();
@@ -203,9 +264,10 @@
   }
 
   window.addEventListener('vrdisplaypresentchange', function (e) {
-    // NOTES:
-    // - Firefox doesn't include `display` and `reason` in the event.
-    //   - Chromium builds do but no for `reason` of `navigation`.
+    // Implementation status notes:
+    //   - Firefox: `display` and `reason` are passed in the event instance.
+    //   - Chromium WebVR builds: `display` is supported; `reason` is
+    //     supported, but not yet for `navigation`.
     log('"' + e.type + '" event fired');
     activeVRDisplaysUpdate();
   });
