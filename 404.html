@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="none">
-    <title>404 Not Found – A-Frame</title>
+    <title>404 Not Found – A-Frame Link Demo</title>
     <style>
       html {
         background: rgb(239,94,45);
@@ -45,6 +45,18 @@
     <h1>404 Not Found</h1>
     <p>Sorry, we could not find the page or file you requested.</p>
     <p>It's possible that the link you clicked is out of date or the address was typed incorrectly.</p>
-    <p>Visit <a href="/">aframe.io</a>.</p>
+    <p>Visit <a href="./" id="home-link">home</a>.</p>
+    <script>
+      (function () {
+        // Check if we are being served from GitHub Pages.
+        if (window.location.pathname.indexOf('/aframe-link-demo/') === 0) {
+          var homeLink = document.querySelector('#home-link');
+          if (homeLink) {
+            // Change URL for the "home" page.
+            homeLink.setAttribute('href', '/aframe-link-demo/');
+          }
+        }
+      })();
+    </script>
   </body>
 </html>
